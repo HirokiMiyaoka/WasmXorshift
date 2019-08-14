@@ -13,7 +13,13 @@ fetch( 'xos.wasm' ).then( ( result ) =>
 } ).then( ( bytes ) =>
 {
 	console.log( bytes );
-	return WebAssembly.instantiate( bytes, {} );
+	return WebAssembly.instantiate( bytes,
+	{
+		imports:
+		{
+			log: function( ... args ) { console.log( ... args ); }
+		}
+	} );
 } ).then( ( mod ) =>
 {
 	consoloe.log( 'Load:', mod );

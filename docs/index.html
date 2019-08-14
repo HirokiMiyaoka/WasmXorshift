@@ -36,7 +36,7 @@ class XorShift
 		this.z = this.w;
 		this.w = ( this.w ^ ( this.w >> 19 ) ^ ( t ^ ( t >> 8 ) ) );
 
-		return this.w;
+		return ( this.w & 0x8000 ) > 0 ? this.w - 0x10000: this.w;
 	}
 
 	next()
@@ -93,9 +93,8 @@ document.addEventListener( 'DOMContentLoaded', () =>
 
 	c( 'next', () =>
 	{
-		const value = rand.nextInt();
-		console.log( value, value.toString( 16 ) );
-		result.value = value + '';
+		const value = '0x' + rand.nextInt().toString( 16 );
+		result.value = value;
 		log.value = result.value + '\n' + log.value;
 	} );
 } );
@@ -126,11 +125,11 @@ textarea { box-sizing: border-box; width: 100%; height: 10rem; }
 		JS
 		<textarea id="log"></textarea>
 		C
-		<textarea readonly>516391518
--661847888
--1794094678
-458299110
--593279510</textarea>
+		<textarea readonly>0x1ec7825e
+0xd88d00b0
+0x951049aa
+0x1b5116e6
+0xdca345ea</textarea>
 	</div>
 </body>
 </html>

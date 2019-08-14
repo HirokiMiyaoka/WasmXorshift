@@ -51,19 +51,20 @@ public:
 int main()
 {
 	XorShift *xos = new XorShift();
+	char *format = "0x%04x\n";
 
-	printf( "%d\n", xos->nextInt() );
-	printf( "%d\n", xos->nextInt() );
-	printf( "%d\n", xos->nextInt() );
-	printf( "%d\n", xos->nextInt() );
-	printf( "%d\n", xos->nextInt() );
+	printf( format, xos->nextInt() );
+	printf( format, xos->nextInt() );
+	printf( format, xos->nextInt() );
+	printf( format, xos->nextInt() );
+	printf( format, xos->nextInt() );
 	xos->seed();
-	printf( "%d\n", xos->nextInt() );
-	printf( "%d\n", xos->nextInt() );
-	printf( "%d\n", xos->nextInt() );
+	printf( format, xos->nextInt() );
+	printf( format, xos->nextInt() );
+	printf( format, xos->nextInt() );
 	xos->seed( 0, 0, 0, 0 );
-	printf( "%d\n", xos->nextInt() );
-	printf( "%d\n", xos->nextInt() );
-	printf( "%d\n", xos->nextInt() );
+	printf( format, xos->nextInt() );
+	printf( format, xos->nextInt() );
+	printf( format, xos->nextInt() );
 	return 0;
 }

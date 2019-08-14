@@ -24,7 +24,7 @@ export function seed( a: u32 = 0, b: u32 = 0, c: u32 = 0, d: u32 = 0 ): void
 	w = d;
 }
 
-export function nextInt(): u32
+export function nextInt(): i32
 {
 	const t: u32 = ( x ^ ( x << 11 ) );
 	x = y;

@@ -58,10 +58,12 @@ int main()
 	printf( format, xos->nextInt() );
 	printf( format, xos->nextInt() );
 	printf( format, xos->nextInt() );
+	printf( "----\n" );
 	xos->seed();
 	printf( format, xos->nextInt() );
 	printf( format, xos->nextInt() );
 	printf( format, xos->nextInt() );
+	printf( "----\n" );
 	xos->seed( 0, 0, 0, 0 );
 	printf( format, xos->nextInt() );
 	printf( format, xos->nextInt() );

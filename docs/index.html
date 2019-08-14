@@ -54,7 +54,7 @@ function LoadWebAssembly( wasm, importObject = {} )
 	} );
 }
 
-LoadWebAssembly( fetch( './xos.wasm' ), {} ).then( ( mod ) =>
+LoadWebAssembly( fetch( './xos.wasm' ), {/* imports: { log: arg => console.log(arg) } */} ).then( ( mod ) =>
 {
 	console.log( mod );
 	// mod.instance.exports: { seed( a: number = 0, b: number = 0, c: number = 0, d: number = 0 ): void, nextInt(): number, next(): number, X: 123456789, Y: 362436069, Z: 521288629, W: 88675123 }

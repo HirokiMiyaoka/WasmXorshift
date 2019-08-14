@@ -93,7 +93,7 @@ document.addEventListener( 'DOMContentLoaded', () =>
 
 	c( 'next', () =>
 	{
-		result.value = ( rand.nextUint() >>> 0 ) + '';
+		result.value = ( rand.nextInt() >>> 0 ) + '';
 		log.value = result.value + '\n' + log.value;
 	} );
 } );

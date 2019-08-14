@@ -6,6 +6,45 @@
 <script>
 const xos = { seed: () => {}, nextInt: () => { return 0; }, next: () => { return 0; } };
 
+class XorShift
+{
+	constructor( x = 0, y = 0, z = 0, w = 0 )
+	{
+		this.seed( x, y, z, w );
+	}
+
+	seed( x = 0, y = 0, z = 0, w = 0 )
+	{
+		if ( !x && !y && !z && !w )
+		{
+			x = 123456789;
+			y = 362436069;
+			z = 521288629;
+			w = 88675123;
+		}
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.w = w;
+	}
+
+	nextInt()
+	{
+		const t = ( this.x ^ ( this.x << 11 ) );
+		this.x = this.y;
+		this.y = this.z;
+		this.z = this.w;
+		this.w = ( this.w ^ ( this.w >> 19 ) ^ ( t ^ ( t >> 8 ) ) );
+
+		return this.w;
+	}
+
+	next()
+	{
+		return this.nextInt() / 0xffffffff;
+	}
+}
+
 function LoadWebAssembly( wasm, importObject = {} )
 {
 	return new Promise( ( resolve, reject ) =>
@@ -15,7 +54,7 @@ function LoadWebAssembly( wasm, importObject = {} )
 	} );
 }
 
-LoadWebAssembly( fetch( 'xos.wasm' ), {} ).then( ( mod ) =>
+LoadWebAssembly( fetch( './xos.wasm' ), {} ).then( ( mod ) =>
 {
 	console.log( mod );
 	// mod.instance.exports: { seed( a: number = 0, b: number = 0, c: number = 0, d: number = 0 ): void, nextInt(): number, next(): number, X: 123456789, Y: 362436069, Z: 521288629, W: 88675123 }
@@ -30,6 +69,17 @@ function n( i ) { return ( parseInt( i.value ) || 0 ) >>> 0; }
 
 document.addEventListener( 'DOMContentLoaded', () =>
 {
+	const jsxos = new XorShift();
+	let rand = xos;
+
+	const mode = e( 'mode' );
+	function change()
+	{
+		rand = mode.options[ mode.selectedIndex ].value === 'JS' ? jsxos : xos;
+	}
+	mode.addEventListener( 'change', change );
+	change();
+
 	const seeds = [ e( 'seed0' ), e( 'seed1' ), e( 'seed2' ), e( 'seed3' ) ];
 	const result = e( 'result' );
 	const log = e( 'log' );
@@ -38,12 +88,12 @@ document.addEventListener( 'DOMContentLoaded', () =>
 	{
 		log.result = '';
 		log.value = '';
-		xos.seed( n( seeds[ 0 ] ), n( seeds[ 1 ] ), n( seeds[ 2 ] ), n( seeds[ 3 ] )  );
+		rand.seed( n( seeds[ 0 ] ), n( seeds[ 1 ] ), n( seeds[ 2 ] ), n( seeds[ 3 ] )  );
 	} );
 
 	c( 'next', () =>
 	{
-		result.value = xos.nextInt() + '';
+		result.value = rand.nextInt() + '';
 		log.value = result.value + '\n' + log.value;
 	} );
 } );
@@ -56,15 +106,19 @@ textarea { box-sizing: border-box; width: 100%; height: 10rem; }
 </head>
 <body>
 	<div>
+		<select id="mode">
+			<option value="WebAssembly">WebAssembly</option>
+			<option value="JS">JS</option>
+		</select>
+		<input type="text" id="result" readonly>
+		<button id="next">Next</button>
+	</div>
+	<div>
 		<input type="number" id="seed0" value="0">
 		<input type="number" id="seed1" value="0">
 		<input type="number" id="seed2" value="0">
 		<input type="number" id="seed3" value="0">
 		<button id="reset">Reset</button>
-	</div>
-	<div>
-		<input type="text" id="result" readonly>
-		<button id="next">Next</button>
 	</div>
 	<div>
 		<textarea id="log"></textarea>

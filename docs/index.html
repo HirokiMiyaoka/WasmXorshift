@@ -6,23 +6,11 @@
 <script>
 const xos = { seed: () => {}, nextInt: () => { return 0; }, next: () => { return 0; } };
 
-fetch( 'xos.wasm' ).then( ( result ) =>
+let test;
+WebAssembly.instantiateStreaming( fetch( 'xos.wasm' ), {} ).then( ( mod ) =>
 {
-	console.log( result.ok );
-	return result.arrayBuffer();
-} ).then( ( bytes ) =>
-{
-	console.log( bytes );
-	return WebAssembly.instantiate( bytes,
-	{
-		imports:
-		{
-			log: function( ... args ) { console.log( ... args ); }
-		}
-	} );
-} ).then( ( mod ) =>
-{
-	consoloe.log( 'Load:', mod );
+	test = mod;
+//	consoloe.log( 'Load:', mod );
 	// mod.instance.exports: { seed( a: number = 0, b: number = 0, c: number = 0, d: number = 0 ): void, nextInt(): number, next(): number, X: 123456789, Y: 362436069, Z: 521288629, W: 88675123 }
 	xos.seed = mod.instance.exports.seed;
 	xos.nextInt = mod.instance.exports.nextInt;

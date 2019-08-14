@@ -35,8 +35,6 @@ export function nextInt(): u32
 	return w;
 }
 
-export function next(): f64
-{
-	return <f64>nextInt() / 0xffffffff;
-}
+export function nextUint(): u32 { return nextInt() >>> 0; }
 
+export function next(): f64 { return <f64>nextInt() / 0xffffffff; }

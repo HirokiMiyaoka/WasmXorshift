@@ -61,6 +61,7 @@ LoadWebAssembly( fetch( './xos.wasm' ), {} ).then( ( mod ) =>
 	xos.seed = mod.instance.exports.seed;
 	xos.nextInt = mod.instance.exports.nextInt;
 	xos.next = mod.instance.exports.next;
+	xos.nextUint = mod.instance.exports.nextUint;
 } ).catch( ( error ) => { console.log( error ); } );
 
 function e( id ) { return document.getElementById( id ); }
@@ -93,7 +94,7 @@ document.addEventListener( 'DOMContentLoaded', () =>
 
 	c( 'next', () =>
 	{
-		result.value = rand.nextInt() + '';
+		result.value = rand.nextUint() + '';
 		log.value = result.value + '\n' + log.value;
 	} );
 } );

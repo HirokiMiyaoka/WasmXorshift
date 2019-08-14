@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>WasmXorShift</title>
+<script>
+const xos = { seed: () => {}, nextInt: () => { return 0; }, next: () => { return 0; } };
+
+WebAssembly.instantiateStreaming( fetch( 'xos.wasm' ), {} ).then( ( mod ) =>
+{
+	consoloe.log( 'Load:', mod );
+	// mod.instance.exports: { seed( a: number = 0, b: number = 0, c: number = 0, d: number = 0 ): void, nextInt(): number, next(): number, X: 123456789, Y: 362436069, Z: 521288629, W: 88675123 }
+	xos.seed = mod.instance.exports.seed;
+	xos.nextInt = mod.instance.exports.nextInt;
+	xos.next = mod.instance.exports.next;
+} ).catch( ( error ) => { console.log( error ); } );
+
+function e( id ) { return document.getElementById( id ); }
+function c( id, callback ) { e( id ).addEventListener( 'click', callback ); }
+function n( i ) { return parseInt( i.value ) || 0; }
+
+document.addEventListener( 'DOMContentLoaded', () =>
+{
+	const seeds = [ e( 'seed0' ), e( 'seed1' ), e( 'seed2' ), e( 'seed3' ) ];
+	const result = e( 'result' );
+	const log = e( 'log' );
+
+	c( 'reset', () =>
+	{
+		log.result = '';
+		log.value = '';
+		xos.seed( n( seeds[ 0 ] ), n( seeds[ 1 ] ), n( seeds[ 2 ] ), n( seeds[ 3 ] )  );
+	} );
+
+	c( 'next', () =>
+	{
+		result.value = xos.nextInt() + '';
+		log.value = result.value + '\n' + log.value;
+	} );
+} );
+</script>
+<style>
+div { width: 80%; margin: auto 1rem; }
+input { width: 6rem; }
+textarea { box-sizing: border-box; width: 100%; height: 10rem; }
+</style>
+</head>
+<body>
+	<div>
+		<input type="number" id="seed0" value="0">
+		<input type="number" id="seed1" value="0">
+		<input type="number" id="seed2" value="0">
+		<input type="number" id="seed3" value="0">
+		<button id="reset">Reset</button>
+	</div>
+	<div>
+		<input type="text" id="result" readonly>
+		<button id="next">Next</button>
+	</div>
+	<div>
+		<textarea id="log"></textarea>
+	</div>
+</body>
+</html>

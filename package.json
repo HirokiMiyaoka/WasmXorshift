@@ -1,0 +1,16 @@
+{
+  "name": "wasmxorshift",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "asc --runtime none -o docs/xos.wasm src/index.ts",
+    "tbuild": "asc --runtime none -o docs/xos.wast src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hiroki",
+  "license": "None",
+  "dependencies": {
+    "assemblyscript": "github:AssemblyScript/assemblyscript"
+  }
+}

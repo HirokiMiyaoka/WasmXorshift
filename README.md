@@ -128,7 +128,7 @@ const xos = ( ( Xorshift, wasm ) =>
 
 	nextInt()
 	{
-		function n( n ) { return n < 0 ? n >>> 0 : n }
+		function n( n ) { return n < 0 ? n >>> 0 : n; }
 		const t = n( this.x ^ ( this.x << 11 ) );
 		this.x = this.y;
 		this.y = this.z;

@@ -6,6 +6,7 @@
   "scripts": {
     "build": "asc --runtime none -o docs/xos.wasm src/index.ts",
     "tbuild": "asc --runtime none -o docs/xos.wast src/index.ts",
+    "jbuild": "tsc -t ES2017 --outDir docs/ src/Xorshift.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Hiroki",

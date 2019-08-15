@@ -24,12 +24,11 @@ class Xorshift
 
 	nextInt()
 	{
-		function n( n: number ) { return n < 0 ? n >>> 0 : n; }
-		const t = n( this.x ^ ( this.x << 11 ) );
+		const t = ( this.x ^ ( this.x << 11 ) ) >>> 0;
 		this.x = this.y;
 		this.y = this.z;
 		this.z = this.w;
-		this.w = n( this.w ^ n( this.w >>> 19 ) ^ n( t ^ n( t >>> 8 ) ) );
+		this.w = ( this.w ^ ( ( this.w >>> 19 ) >>> 0 ) ^ ( ( t ^ ( ( t >>> 8 ) >>> 0 ) ) >>> 0 ) ) >>> 0;
 		return this.w;
 	}
 

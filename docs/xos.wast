@@ -1,7 +1,6 @@
 (module
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$d (func (result f64)))
  (type $FUNCSIG$vi (func (param i32)))
  (memory $0 0)
@@ -76,7 +75,7 @@
   local.get $3
   global.set $src/index/w
  )
- (func $src/index/nextInt (; 2 ;) (type $FUNCSIG$i) (result i32)
+ (func $src/index/nextInt (; 2 ;) (type $FUNCSIG$d) (result f64)
   (local $0 i32)
   global.get $src/index/x
   global.get $src/index/x
@@ -103,10 +102,10 @@
   i32.xor
   global.set $src/index/w
   global.get $src/index/w
+  f64.convert_i32_u
  )
  (func $src/index/next (; 3 ;) (type $FUNCSIG$d) (result f64)
   call $src/index/nextInt
-  f64.convert_i32_u
   f64.const 4294967295
   f64.div
  )

@@ -42,8 +42,7 @@ function LoadWebAssembly( wasm, importObject = {} )
 {
 	return new Promise( ( resolve, reject ) =>
 	{
-		WebAssembly.instantiateStreaming( wasm, importObject )
-			.then( resolve ).catch( reject );
+		WebAssembly.instantiateStreaming( wasm, importObject ).then( resolve ).catch( reject );
 	} );
 }
 

@@ -2,16 +2,13 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>WasmXorShift</title>
+<title>WasmXorshift</title>
 <script>
 const xos = { seed: () => {}, nextInt: () => { return 0; }, next: () => { return 0; } };
 
-class XorShift
+class Xorshift
 {
-	constructor( x = 0, y = 0, z = 0, w = 0 )
-	{
-		this.seed( x, y, z, w );
-	}
+	constructor( x = 0, y = 0, z = 0, w = 0 ) { this.seed( x, y, z, w ); }
 
 	seed( x = 0, y = 0, z = 0, w = 0 )
 	{
@@ -30,19 +27,16 @@ class XorShift
 
 	nextInt()
 	{
-		const t = ( this.x ^ ( this.x << 11 ) );
+		function n( n ) { return n < 0 ? n >>> 0 : n }
+		const t = n( this.x ^ ( this.x << 11 ) );
 		this.x = this.y;
 		this.y = this.z;
 		this.z = this.w;
-		this.w = ( this.w ^ ( this.w >> 19 ) ^ ( t ^ ( t >> 8 ) ) );
-
-		return ( this.w & 0x8000 ) > 0 ? this.w - 0x10000: this.w;
+		this.w = n( this.w ^ n( this.w >>> 19 ) ^ n( t ^ n( t >>> 8 ) ) );
+		return this.w;
 	}
 
-	next()
-	{
-		return this.nextInt() / 0xffffffff;
-	}
+	next() { return this.nextInt() / 0xffffffff; }
 }
 
 function LoadWebAssembly( wasm, importObject = {} )
@@ -69,7 +63,7 @@ function n( i ) { return ( parseInt( i.value ) || 0 ); }
 
 document.addEventListener( 'DOMContentLoaded', () =>
 {
-	const jsxos = new XorShift();
+	const jsxos = new Xorshift();
 	let rand = xos;
 
 	const mode = e( 'mode' );
@@ -125,11 +119,17 @@ textarea { box-sizing: border-box; width: 100%; height: 10rem; }
 		JS
 		<textarea id="log"></textarea>
 		C
-		<textarea readonly>0x1ec7825e
+		<textarea readonly>0x17906569
+0x837ad58
+0x2ac00f2c
+0x9af81443
+0x8db24146
+0x1ec7825e
 0xd88d00b0
 0x951049aa
 0x1b5116e6
 0xdca345ea</textarea>
 	</div>
+	<div style="text-align:center"><a href="./sample.html">Sample</a></div>
 </body>
 </html>

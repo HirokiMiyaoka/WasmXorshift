@@ -41,25 +41,22 @@ document.addEventListener( 'DOMContentLoaded', () =>
 				0x0B ] ).buffer;
 		} ).then( ( bytes ) =>
 		{
+			return WebAssembly.compile( bytes );
+		} ).then( ( mod ) =>
+		{
 			return function( importObject = {} )
 			{
-				this.ready = WebAssembly.instantiate( bytes, importObject ).then( ( mod ) =>
-				{
-					this.seed = mod.instance.exports.seed;
-					this.nextInt = mod.instance.exports.nextInt;
-					this.next = mod.instance.exports.next;
-					return this;
-				} );
+				const instance = new WebAssembly.Instance( mod, {} );
+				this.seed = instance.exports.seed;
+				this.nextInt = instance.exports.nextInt;
+				this.next = instance.exports.next;
 			};
 		} ).then( ( XorShift ) =>
 		{
-			return Promise.all( [ new XorShift().ready, new XorShift().ready ] );
-		} ).then( ( result ) =>
-		{
-			const xos1 = result[ 0 ];
+			const xos1 = new XorShift();
 			const result1 = document.getElementById( 'result1' );
 			document.getElementById( 'next1' ).addEventListener( 'click', () => { result1.value = '0x' + xos1.nextInt().toString( 16 ); } );
-			const xos2 = result[ 1 ];
+			const xos2 = new XorShift();
 			const result2 = document.getElementById( 'result2' );
 			document.getElementById( 'next2' ).addEventListener( 'click', () => { result2.value = '0x' + xos2.nextInt().toString( 16 ); } );
 		} );

@@ -46,9 +46,9 @@ WebAssembly.instantiateStreaming( fetch( './xos.wasm' ), {} ).then( ( mod ) =>
 WebAssemblyのバイナリデータを直にソースコードに埋め込むことで、`fetch()` が使えないローカルでも利用することができる。
 
 ```js
-const XorShift = ( function()
+function CompileXorshift()
 {
-	const bytes = Uint8Array.from( [
+	return WebAssembly.compile( Uint8Array.from( [
 		0x00,0x61,0x73,0x6D,0x01,0x00,0x00,0x00,0x01,0x13,0x04,0x60,0x00,0x00,0x60,0x04,
 		0x7F,0x7F,0x7F,0x7F,0x00,0x60,0x00,0x01,0x7C,0x60,0x01,0x7F,0x00,0x03,0x09,0x08,
 		0x00,0x01,0x02,0x02,0x00,0x00,0x01,0x03,0x04,0x04,0x01,0x70,0x00,0x01,0x05,0x03,
@@ -75,27 +75,47 @@ const XorShift = ( function()
 		0x0E,0x05,0x01,0x02,0x03,0x04,0x05,0x00,0x0B,0x00,0x0B,0x41,0x00,0x21,0x00,0x0B,
 		0x41,0x00,0x21,0x01,0x0B,0x41,0x00,0x21,0x02,0x0B,0x41,0x00,0x21,0x03,0x0B,0x20,
 		0x00,0x20,0x01,0x20,0x02,0x20,0x03,0x10,0x01,0x0B,0x06,0x00,0x20,0x00,0x24,0x08,
-		0x0B ] ).buffer;
-	return function( importObject = {} )
+		0x0B
+	] ).buffer ).then( ( mod ) =>
 	{
-		this.ready = WebAssembly.instantiate( bytes, importObject ).then( ( mod ) =>
+		return function( importObject = {} )
 		{
-			this.seed = mod.instance.exports.seed;
-			this.nextInt = mod.instance.exports.nextInt;
-			this.next = mod.instance.exports.next;
-			return this;
-		} );
-	};
-} )();
+			const instance = new WebAssembly.Instance( mod, {} );
+			this.seed = instance.exports.seed;
+			this.nextInt = instance.exports.nextInt;
+			this.next = instance.exports.next;
+		};
+		// or
+		/*
+		return function( importObject = {} )
+		{
+			this.ready = WebAssembly.instantiate( mod, {} ).then( ( instance ) =>
+			{
+				this.seed = instance.exports.seed;
+				this.nextInt = instance.exports.nextInt;
+				this.next = instance.exports.next;
+				return this;
+			} );
+		};
+		*/
+	} );
+}
 ```
 
 ```js
-const xos = new XorShift();
-xos.ready.then( () => { console.log( xos.nextInt() ); } );
+CompileXorshift().then( ( Xorshift ) =>
+{
+	const xos = new Xorshift();
+	console.log( '0x' + xos.nextInt().toString( 16 ) );
+} );
 
 // or
 
-new XorShift().ready.then( ( xos ) => { console.log( xos.nextInt() ); } );
+CompileXorshift().then( ( Xorshift ) =>
+{
+	const xos = new Xorshift();
+	xos.ready.then( () => { console.log( '0x' + xos.nextInt().toString( 16 ) ); } );
+} );
 ```
 
 ## JS Xorshift

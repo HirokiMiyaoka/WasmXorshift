@@ -6,6 +6,7 @@
   "scripts": {
     "build:wasm": "asc --runtime none -o docs/xos.wasm src/index.ts",
     "build:wast": "asc --runtime none -o docs/xos.wast src/index.ts",
+    "build:wat": "asc --runtime none -o docs/xos.wat src/index.ts",
     "build:js": "tsc -t ES2017 --outDir docs/ src/Xorshift.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

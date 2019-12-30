@@ -1,11 +1,10 @@
 (module
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$d (func (result f64)))
- (type $FUNCSIG$vi (func (param i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_f64 (func (result f64)))
+ (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $src/index/X i32 (i32.const 123456789))
  (global $src/index/Y i32 (i32.const 362436069))
  (global $src/index/Z i32 (i32.const 521288629))
@@ -25,7 +24,7 @@
  (export "nextInt" (func $src/index/nextInt))
  (export "next" (func $src/index/next))
  (start $start)
- (func $start:src/index (; 0 ;) (type $FUNCSIG$v)
+ (func $start:src/index (; 0 ;)
   global.get $src/index/X
   global.set $src/index/x
   global.get $src/index/Y
@@ -35,7 +34,7 @@
   global.get $src/index/W
   global.set $src/index/w
  )
- (func $src/index/seed (; 1 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $src/index/seed (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $0
   i32.eqz
   if (result i32)
@@ -75,7 +74,7 @@
   local.get $3
   global.set $src/index/w
  )
- (func $src/index/nextInt (; 2 ;) (type $FUNCSIG$d) (result f64)
+ (func $src/index/nextInt (; 2 ;) (result f64)
   (local $0 i32)
   global.get $src/index/x
   global.get $src/index/x
@@ -104,17 +103,15 @@
   global.get $src/index/w
   f64.convert_i32_u
  )
- (func $src/index/next (; 3 ;) (type $FUNCSIG$d) (result f64)
+ (func $src/index/next (; 3 ;) (result f64)
   call $src/index/nextInt
   f64.const 4294967295
   f64.div
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 4 ;)
   call $start:src/index
  )
- (func $null (; 5 ;) (type $FUNCSIG$v)
- )
- (func $src/index/seed|trampoline (; 6 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $src/index/seed|trampoline (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   block $4of4
    block $3of4
     block $2of4
@@ -144,7 +141,7 @@
   local.get $3
   call $src/index/seed
  )
- (func $~lib/setargc (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/setargc (; 6 ;) (param $0 i32)
   local.get $0
   global.set $~lib/argc
  )

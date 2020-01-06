@@ -1,4 +1,4 @@
-/// <reference path="../node_modules/assemblyscript/dist/assemblyscript.d.ts" />
+/// <reference path="../node_modules/assemblyscript/index.d.ts" />
 
 export const X: u32 = 123456789;
 export const Y: u32 = 362436069;
